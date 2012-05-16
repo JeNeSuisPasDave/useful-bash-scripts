@@ -1,6 +1,6 @@
 #! /bin/sh
 #
-# Arguments: pbuser pbpwd userid subdirectories
+# Arguments: pbuser pbpwd subdirectories
 #
 
 badArgs() {
@@ -50,18 +50,32 @@ then
 	OVERWRITE_=1
 fi
 
+echo "Starting."
+
 if [ -e "$AGENTTGT_" ]
 then
 	launchctl unload -w -S Background "$AGENTTGT_"
+	echo "... Unloaded agent"
 fi
 
 cat backup-pinboard.sh | \
 	sed s/{{pbuser}}/$PBUSER_/ | \
 	sed s/{{pbpwd}}/$PBPWD_/ > \
 	"$SCRIPTTGT_"
+chmod u+x "$SCRIPTTGT_"
+echo "... Installed backup script"
 cat net.localhost.PinboardBackup.plist | \
 	sed s/{{userid}}/$UID_/ | \
 	sed "s/{{subdir}}/$SUBDIRQ_/" > \
 	"$AGENTTGT_"
+echo "... Installed user agent plist file"
 
 launchctl load -w -S Background "$AGENTTGT_"
+echo "... loaded agent to schedule backup script execution"
+
+# Get out
+#
+echo "Done."
+exit 0
+#
+# EOF
