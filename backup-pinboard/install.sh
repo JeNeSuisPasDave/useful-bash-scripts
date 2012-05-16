@@ -13,21 +13,22 @@ badArgs() {
 #
 if [ -z "$1" ]
 then
-	PBUSER_=$1
-else
 	badArgs
+else
+	PBUSER_=$1
 fi
 if [ -z "$2" ]
 then
-	PBPWD_=$2
-else
 	badArgs
+else
+	PBPWD_=$2
 fi
 if [ -z "$3" ]
 then
-	SUBDIR_=$3
-else
 	badArgs
+else
+	SUBDIR_=$3
+	SUBDIRQ_=`echo -n $3 | sed 's!/!\\\\/!g' | sed "s/\-n //"`
 fi
 UID_=`whoami`
 
@@ -51,7 +52,7 @@ fi
 
 if [ -e "$AGENTTGT_" ]
 then
-	luanchctl unload -w -S Background "$AGENTTGT_"
+	launchctl unload -w -S Background "$AGENTTGT_"
 fi
 
 cat backup-pinboard.sh | \
@@ -60,7 +61,7 @@ cat backup-pinboard.sh | \
 	"$SCRIPTTGT_"
 cat net.localhost.PinboardBackup.plist | \
 	sed s/{{userid}}/$UID_/ | \
-	sed s/{{subdir}}/$SUBDIR_ > \
+	sed "s/{{subdir}}/$SUBDIRQ_/" > \
 	"$AGENTTGT_"
 
 launchctl load -w -S Background "$AGENTTGT_"
