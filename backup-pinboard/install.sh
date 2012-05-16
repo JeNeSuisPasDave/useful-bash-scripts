@@ -5,7 +5,9 @@
 
 badArgs() {
 	echo "Install failed. Bad argument list."
-	echo "Arguments are pinboard userid, pinboard password, user subdirectory"
+	echo "Arguments are pinboard userid, pinboard password, user subdirectory \
+without leading or trailing directory separator. For example: \"./install.sh \
+pbuser pbpwd Documents/Backups/Pinboard\""
 	exit 2
 }
 
@@ -63,6 +65,7 @@ cat backup-pinboard.sh | \
 	sed s/{{pbpwd}}/$PBPWD_/ > \
 	"$SCRIPTTGT_"
 chmod u+x "$SCRIPTTGT_"
+chmod go-rwx "$SCRIPTTGT_"
 echo "... Installed backup script"
 cat net.localhost.PinboardBackup.plist | \
 	sed s/{{userid}}/$UID_/ | \
