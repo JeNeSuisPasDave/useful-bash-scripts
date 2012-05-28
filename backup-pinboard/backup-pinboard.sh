@@ -26,6 +26,7 @@ then
 else
 	SAVECNT_=$1
 fi
+echo "[backup-pinboard.sh] Keep $SAVECNT_ copies"
 
 # Get today's date
 #
@@ -66,7 +67,7 @@ fi
 # Clean up the older XML files
 #
 NXML_=`ls -1 *.*.xml | wc -l`
-if [[ 10 -lt $NXML_ ]]
+if [[ $SAVECNT_ -lt $NXML_ ]]
 then
 	let "NDEL_ = $NXML_ - $SAVECNT_"
 	for file in `ls -1 *.*.xml`
@@ -82,7 +83,7 @@ fi
 # Clean up the older JSON files
 #
 NJSON_=`ls -1 *.*.json | wc -l`
-if [[ 10 -lt $NJSON_ ]]
+if [[ $SAVECNT_ -lt $NJSON_ ]]
 then
 	let "NDEL_ = $NJSON_ - $SAVECNT_"
 	for file in `ls -1 *.*.json`
