@@ -68,7 +68,7 @@ fi
 NXML_=`ls -1 *.*.xml | wc -l`
 if [[ 10 -lt $NXML_ ]]
 then
-	let "NDEL_ = $NXML_ - 10"
+	let "NDEL_ = $NXML_ - $SAVECNT_"
 	for file in `ls -1 *.*.xml`
 	do
 	    if [[ 0 -lt $NDEL_ ]]
@@ -84,7 +84,7 @@ fi
 NJSON_=`ls -1 *.*.json | wc -l`
 if [[ 10 -lt $NJSON_ ]]
 then
-	let "NDEL_ = $NJSON_ - 10"
+	let "NDEL_ = $NJSON_ - $SAVECNT_"
 	for file in `ls -1 *.*.json`
 	do
 	    if [[ 0 -lt $NDEL_ ]]

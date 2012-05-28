@@ -21,9 +21,9 @@
 	<key>StartCalendarInterval</key>
 	<dict>
 		<key>Hour</key>
-		<integer>22</integer>
+		<integer>21</integer>
 		<key>Minute</key>
-		<integer>25</integer>
+		<integer>05</integer>
 	</dict>
 	<key>WorkingDirectory</key>
 	<string>/Users/{{userid}}/{{subdir}}</string>
