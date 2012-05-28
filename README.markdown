@@ -1,12 +1,12 @@
 # Useful BASH Scripts
 
-## Table of Contents [ubstoc]
+## Table of Contents
 
-* [Introduction](#ubsintro)
-* [backup-pinboard](#ubsbkuppb)
-* [Document History](#ubsdochis)
+* <a href="#ubsintro">Introduction</a>
+* <a href="#ubsbkuppb">backup-pinboard</a>
+* <a href="#ubsdochis">Document History</a>
 
-## Introduction [ubsintro]
+## Introduction<a id="ubsintro"/>
 
 This Git repository contains bash scripts that I found useful on my OS X system.
 
@@ -15,7 +15,7 @@ Each sub-directory contains one or more scripts and supporting files focus on a 
 <p class="toclink">^<a href="#ubstoc" title="Back to Table of Contents">TOC</a>
 </p>
 
-## backup-pinboard [ubsbkuppb]l
+## backup-pinboard<a id="ubsbkuppb"/>
 
 This script makes a copy of my [Pinboard](http://pinboard.in) bookmarks. It is intended to scheduled daily or weekly, and maintains a rolling list of older backups.
 
@@ -24,7 +24,7 @@ There is an installer that inserts the Pinboard username and password, and sets 
 <p class="toclink">^<a href="#ubstoc" title="Back to Table of Contents">TOC</a>
 </p>
 
-## Document History [ubsdochis]
+## Document History<a id="ubsdochis"/>
 
 * 2012.05.13 - Created
 
