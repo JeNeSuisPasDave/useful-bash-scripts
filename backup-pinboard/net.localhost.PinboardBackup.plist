@@ -2,26 +2,20 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Disabled</key>
-	<false/>
-	<key>KeepAlive</key>
-	<false/>
 	<key>Label</key>
 	<string>net.localhost.PinboardBackup</string>
 	<key>LimitLoadToSessionType</key>
-	<string>Background</string>
+	<string>Aqua</string>
 	<key>ProgramArguments</key>
 	<array>
 		<string>/bin/sh</string>
 		<string>backup-pinboard.sh</string>
 		<string>5</string>
 	</array>
-	<key>RunAtLoad</key>
-	<false/>
 	<key>StartCalendarInterval</key>
 	<dict>
 		<key>Hour</key>
-		<integer>21</integer>
+		<integer>22</integer>
 		<key>Minute</key>
 		<integer>05</integer>
 	</dict>

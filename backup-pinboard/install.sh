@@ -56,7 +56,7 @@ echo "Starting."
 
 if [ -e "$AGENTTGT_" ]
 then
-	launchctl unload -w -S Background "$AGENTTGT_"
+	launchctl unload -w -S Aqua "$AGENTTGT_"
 	echo "... Unloaded agent"
 fi
 
@@ -73,7 +73,7 @@ cat net.localhost.PinboardBackup.plist | \
 	"$AGENTTGT_"
 echo "... Installed user agent plist file"
 
-launchctl load -w -S Background "$AGENTTGT_"
+launchctl load -w -S Aqua "$AGENTTGT_"
 echo "... loaded agent to schedule backup script execution"
 
 # Get out
