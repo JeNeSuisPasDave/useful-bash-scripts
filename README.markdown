@@ -73,6 +73,7 @@ immediately into WordPress.
 
 The scripts use:
 
+* MultiMarkdown
 * Perl 5
 * HTML Tidy for HTML5 (I used https://github.com/w3c/tidy-html5/tree/8025154)
 * sed
