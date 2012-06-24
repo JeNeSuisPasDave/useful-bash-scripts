@@ -1,6 +1,6 @@
 # Useful BASH Scripts
 
-<a id="ubstoc" />
+<a id="ubstoc"></a>
 ## Table of Contents
 
 * <a href="#ubsintro">Introduction</a>
@@ -8,7 +8,7 @@
 * <a href="#ubspwp">produce-wp</a>
 * <a href="#ubsdochis">Document History</a>
 
-<a id="ubsintro"/>
+<a id="ubsintro"></a>
 ## Introduction
 
 This Git repository contains bash scripts that I found useful on my OS X system.
@@ -19,7 +19,7 @@ certain task or set of related tasks.
 <p class="toclink">^<a href="#ubstoc" title="Back to Table of Contents">TOC</a>
 </p>
 
-<a id="ubsbkuppb"/>
+<a id="ubsbkuppb"></a>
 ## backup-pinboard
 
 This script makes a copy of my [Pinboard](http://pinboard.in) bookmarks. It is
@@ -33,7 +33,7 @@ file permissions to make sure that only your account can read the file.
 </p>
 
 
-<a id="ubspwp"/>
+<a id="ubspwp"></a>
 ## produce-wp
 
 This script, `produce-wp.sh`, takes [Markdown][] or [MultiMarkdown][] files and
@@ -87,7 +87,7 @@ The scripts use:
 <p class="toclink">^<a href="#ubstoc" title="Back to Table of Contents">TOC</a>
 </p>
 
-<a id="ubsdochis"/>
+<a id="ubsdochis"></a>
 ## Document History
 
 * 2012.05.13 - Created
