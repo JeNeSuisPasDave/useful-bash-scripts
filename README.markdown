@@ -1,14 +1,12 @@
 # Useful BASH Scripts
 
-<a id="ubstoc"></a>
 ## Table of Contents
 
-* <a href="#ubsintro">Introduction</a>
-* <a href="#ubsbkuppb">backup-pinboard</a>
-* <a href="#ubspwp">produce-wp</a>
-* <a href="#ubsdochis">Document History</a>
+* <a href="#introduction">Introduction</a>
+* <a href="#backup-pinboard">backup-pinboard</a>
+* <a href="#produce-wp">produce-wp</a>
+* <a href="#document-history">Document History</a>
 
-<a id="ubsintro"></a>
 ## Introduction
 
 This Git repository contains bash scripts that I found useful on my OS X system.
@@ -16,10 +14,9 @@ This Git repository contains bash scripts that I found useful on my OS X system.
 Each sub-directory contains one or more scripts and supporting files focus on a
 certain task or set of related tasks.
 
-<p class="toclink">^<a href="#ubstoc" title="Back to Table of Contents">TOC</a>
+<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
 </p>
 
-<a id="ubsbkuppb"></a>
 ## backup-pinboard
 
 This script makes a copy of my [Pinboard](http://pinboard.in) bookmarks. It is
@@ -29,11 +26,9 @@ backups.
 There is an installer that inserts the Pinboard username and password, and sets
 file permissions to make sure that only your account can read the file.
 
-<p class="toclink">^<a href="#ubstoc" title="Back to Table of Contents">TOC</a>
+<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
 </p>
 
-
-<a id="ubspwp"></a>
 ## produce-wp
 
 This script, `produce-wp.sh`, takes [Markdown][] or [MultiMarkdown][] files and
@@ -84,10 +79,9 @@ The scripts use:
 * grep
 * pbcopy
 
-<p class="toclink">^<a href="#ubstoc" title="Back to Table of Contents">TOC</a>
+<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
 </p>
 
-<a id="ubsdochis"></a>
 ## Document History
 
 * 2012.05.13 - Created
@@ -96,5 +90,5 @@ The scripts use:
 
 * 2012.06.24 - Added produce-wp scripts.
 	
-<p class="toclink">^<a href="#ubstoc" title="Back to Table of Contents">TOC</a>
+<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
 </p>
