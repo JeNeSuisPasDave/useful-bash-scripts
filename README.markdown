@@ -1,6 +1,6 @@
 # Useful BASH Scripts
 
-## Table of Contents
+## Table of Contents<a id="ubstoc" />
 
 * <a href="#ubsintro">Introduction</a>
 * <a href="#ubsbkuppb">backup-pinboard</a>
@@ -30,7 +30,7 @@ file permissions to make sure that only your account can read the file.
 </p>
 
 
-## produce-wp [ubspwp]
+## produce-wp<a id="ubspwp"/>
 
 This script, `produce-wp.sh`, takes [Markdown][] or [MultiMarkdown][] files and
 produces HTML suitable for pasting into WordPress posts and pages. It requires a
@@ -78,7 +78,7 @@ The scripts use:
 * HTML Tidy for HTML5 (I used https://github.com/w3c/tidy-html5/tree/8025154)
 * sed
 * grep
-* pbcopy.
+* pbcopy
 
 <p class="toclink">^<a href="#ubstoc" title="Back to Table of Contents">TOC</a>
 </p>
