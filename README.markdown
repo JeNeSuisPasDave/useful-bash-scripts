@@ -58,14 +58,14 @@ command command would produce an HTML document called `bestpostever.html`:
 Notice that the file extension is not provided.
 
 The HTML file that is produced would have to be edited and the HTML inside the
-<body> would need to be copied to the clipboard and then pasted into the
+`<body>` would need to be copied to the clipboard and then pasted into the
 WordPress editor (in HTML mode).
 
 You can shortcut that last step by using this command:
 
 	../produce-wp.sh -pb bestpostever
 
-which does not produce any output file; instead, the inner HTML of the <body>
+which does not produce any output file; instead, the inner HTML of the `<body>`
 element is stored in the clipboard (pasteboard) so you can just paste it
 immediately into WordPress.
 
