@@ -4,8 +4,9 @@
 
 * <a href="#introduction">Introduction</a>
 * <a href="#backup-pinboard">backup-pinboard</a>
+* <a href="#detect-mitm">detect-mitm</a>
 * <a href="#produce-wp">produce-wp</a>
-* <a href="#document-history">Document History</a>
+* <a href="#documenthistory">Document History</a>
 
 ## Introduction
 
@@ -14,7 +15,7 @@ This Git repository contains bash scripts that I found useful on my OS X system.
 Each sub-directory contains one or more scripts and supporting files focus on a
 certain task or set of related tasks.
 
-<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
+<p class="toclink">^<a href="#tableofcontents" title="Back to Table of Contents">TOC</a>
 </p>
 
 ## backup-pinboard
@@ -26,7 +27,21 @@ backups.
 There is an installer that inserts the Pinboard username and password, and sets
 file permissions to make sure that only your account can read the file.
 
-<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
+<p class="toclink">^<a href="#tableofcontents" title="Back to Table of Contents">TOC</a>
+</p>
+
+## detect-mitm
+
+A script to detect whether there is an https proxy between your system and
+a variety of well-known web sites. Useful if you are at work, a hotel, 
+a public wifi hotspot, or any other location where your connection to the 
+internet might be intercepted and monitored.
+
+See Steve Gibson's [excellent information page](https://www.grc.com/fingerprints.htm) on this issue and the techniques to detect https MITM (man in the middle) attacks.
+
+__Note__: this script requires __openssl__.
+
+<p class="toclink">^<a href="#tableofcontents" title="Back to Table of Contents">TOC</a>
 </p>
 
 ## produce-wp
@@ -80,7 +95,7 @@ The scripts use:
 * grep
 * pbcopy
 
-<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
+<p class="toclink">^<a href="#tableofcontents" title="Back to Table of Contents">TOC</a>
 </p>
 
 ## Document History
@@ -91,5 +106,5 @@ The scripts use:
 
 * 2012.06.24 - Added produce-wp scripts.
 	
-<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
+<p class="toclink">^<a href="#tableofcontents" title="Back to Table of Contents">TOC</a>
 </p>

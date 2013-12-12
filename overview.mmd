@@ -1,9 +1,12 @@
+Title: Useful BASH Scripts
+
 # Useful BASH Scripts
 
 ## Table of Contents [ubstoc]
 
 * [Introduction](#ubsintro)
 * [backup-pinboard](#ubsbkuppb)
+* [detect-mitm](#ubsdmitm)
 * [produce-wp](#ubspwp)
 * [Document History](#ubsdochis)
 
@@ -25,6 +28,22 @@ backups.
 
 There is an installer that inserts the Pinboard username and password, and sets
 file permissions to make sure that only your account can read the file.
+
+<p class="toclink">^<a href="#ubstoc" title="Back to Table of Contents">TOC</a>
+</p>
+
+## detect-mitm [ubsdmitm]
+
+A script to detect whether there is an https proxy between your system and a
+variety of well-known web sites. Useful if you are at work, a hotel, a public
+wifi hotspot, or any other location where your connection to the internet might
+be intercepted and monitored.
+
+See Steve Gibson's [excellent information
+page](https://www.grc.com/fingerprints.htm) on this issue and the techniques to
+detect https MITM (man in the middle) attacks.
+
+__Note__: this script requires __openssl__.
 
 <p class="toclink">^<a href="#ubstoc" title="Back to Table of Contents">TOC</a>
 </p>
