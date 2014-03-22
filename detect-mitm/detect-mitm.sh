@@ -74,7 +74,7 @@ testHost_() {
 }
 
 host_="www.grc.com"
-fp_expected_="05:0A:A7:C3:5F:85:F0:A8:5B:14:1D:B6:7F:67:8C:60:4F:2D:DE:D3"
+fp_expected_="A8:8E:F2:E4:9A:14:49:C8:A9:42:61:AC:B2:7F:95:20:78:A3:FF:62"
 testHost_ $host_ $fp_expected_
 
 host_="www.facebook.com"
@@ -82,7 +82,7 @@ fp_expected_="13:D0:37:6C:2A:B2:14:36:40:A6:2D:08:BB:71:F5:E9:EF:57:13:61"
 testHost_ $host_ $fp_expected_
 
 host_="www.paypal.com"
-fp_expected_="43:04:31:90:BA:8A:98:97:0C:60:B1:E9:E1:F7:0C:DC:FE:A2:85:D2"
+fp_expected_="DA:F3:F6:D5:3D:57:CF:CC:1C:12:37:83:67:E3:A5:39:9D:44:AE:CB"
 testHost_ $host_ $fp_expected_
 
 host_="www.wikipedia.org"
@@ -90,15 +90,15 @@ fp_expected_="DA:AA:A4:9B:AD:0C:1F:A3:29:71:D8:CC:62:BA:72:D1:A4:DB:94:9F"
 testHost_ $host_ $fp_expected_
 
 host_="twitter.com"
-fp_expected_="C3:1F:6D:53:92:F2:CB:48:0A:42:79:8C:1F:BE:70:82:1D:D8:82:51"
+fp_expected_="25:6E:40:25:23:C3:41:8E:1E:9A:01:85:44:84:58:AF:96:C4:A1:BE"
 testHost_ $host_ $fp_expected_
 
 host_="www.blogger.com"
-fp_expected_="3C:7E:F4:39:46:C1:8A:B6:F4:EB:B8:C6:A4:8C:C0:23:54:11:DC:8D"
+fp_expected_="0D:A4:05:E9:C4:12:5A:88:01:99:5E:8B:68:55:34:8A:E9:A6:A8:01"
 testHost_ $host_ $fp_expected_
 
 host_="www.linkedin.com"
-fp_expected_="1B:9F:9F:CD:D6:DC:CA:1F:FF:50:86:56:29:09:8A:FB:10:CD:E3:89"
+fp_expected_="E6:74:E6:A7:5C:6A:82:A9:2C:CE:25:DF:2A:DD:1C:85:A6:AD:F0:5C"
 testHost_ $host_ $fp_expected_
 
 host_="www.yahoo.com"
@@ -106,7 +106,7 @@ fp_expected_="E4:7E:24:8E:86:D2:BE:55:C0:4D:41:A1:C2:0E:06:96:56:B9:8E:EC"
 testHost_ $host_ $fp_expected_
 
 host_="wordpress.com"
-fp_expected_="1A:C1:3B:AE:40:2C:67:BC:1E:EA:BD:5A:E1:4F:AE:8C:B3:A1:FE:17"
+fp_expected_="E7:79:0C:AA:9D:68:F4:C1:0C:FF:36:C4:F6:2B:1A:06:C2:75:D7:74"
 testHost_ $host_ $fp_expected_
 
 host_="www.wordpress.com"
