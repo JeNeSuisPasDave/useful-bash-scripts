@@ -8,7 +8,7 @@
 * <a href="#dos2unix">dos2unix</a>
 * <a href="#githelpers">githelpers</a>
 * <a href="#produce-wp">produce-wp</a>
-* <a href="#documenthistory">Document History</a>
+* <a href="#document-history">Document History</a>
 
 ## Introduction
 
@@ -171,6 +171,8 @@ The scripts use:
 * 2012.06.24 - Added produce-wp scripts.
 
 * 2014.03.22 -- Added githelpers script collection. Initially includes `fetchall.sh` and `updateall.sh`
+
+* 2014.03.21 -- Added dos2unix collection. Include `dos2unix` and `unix2dos` scripts.
 	
 <p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
 </p>
