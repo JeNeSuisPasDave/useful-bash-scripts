@@ -112,9 +112,6 @@ All the repositories must be bare, mirror repositories.
 
 The script should be copied to the parent directory (the one containing all the cloned repositories) and is executed from the command line with that parent directory as the working directory. It will enter each subdirectory (i.e., each repository) and do a `git remote update --prune`. This will keep each repository update to date with the remote repository.
 
-<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
-</p>
-
 ### Dependencies
 
 The scripts use:
@@ -122,6 +119,9 @@ The scripts use:
 * Git
 * find
 * grep
+
+<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
+</p>
 
 ## produce-wp
 
