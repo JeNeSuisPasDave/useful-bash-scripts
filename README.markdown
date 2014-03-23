@@ -5,6 +5,7 @@
 * <a href="#introduction">Introduction</a>
 * <a href="#backup-pinboard">backup-pinboard</a>
 * <a href="#detect-mitm">detect-mitm</a>
+* <a href="#dos2unix">dos2unix</a>
 * <a href="#githelpers">githelpers</a>
 * <a href="#produce-wp">produce-wp</a>
 * <a href="#documenthistory">Document History</a>
@@ -15,7 +16,7 @@ This Git repository contains bash scripts that I found useful on my OS X system.
 
 Each sub-directory contains one or more scripts and supporting files focus on a certain task or set of related tasks.
 
-<p class="toclink">^<a href="#tableofcontents" title="Back to Table of Contents">TOC</a>
+<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
 </p>
 
 ## backup-pinboard
@@ -24,7 +25,13 @@ This script makes a copy of my [Pinboard](http://pinboard.in) bookmarks. It is i
 
 There is an installer that inserts the Pinboard username and password, and sets file permissions to make sure that only your account can read the file.
 
-<p class="toclink">^<a href="#tableofcontents" title="Back to Table of Contents">TOC</a>
+### Dependencies
+
+The script uses:
+
+* curl
+
+<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
 </p>
 
 ## detect-mitm
@@ -33,9 +40,40 @@ A script to detect whether there is an https proxy between your system and a var
 
 See Steve Gibson's [excellent information page](https://www.grc.com/fingerprints.htm) on this issue and the techniques to detect https MITM (man in the middle) attacks.
 
-__Note__: this script requires __openssl__.
+### Dependencies
 
-<p class="toclink">^<a href="#tableofcontents" title="Back to Table of Contents">TOC</a>
+The script uses:
+
+* openssl
+* cut
+
+<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
+</p>
+
+## dos2unix
+
+`dos2unix` and `unix2dos` are scripts that will convert the line endings in a text file from CRLF form to LF form or vice versa. Another way of saying that is they switch line endings between `\r\n` and `\n`.
+
+* **`dos2unix`** converts CRLF line endings to just LF.
+* **`unix2dos`** converts LF endings to CRLF.
+
+To install it, copy both scripts to a directory in your path (typically ~/bin).
+
+You can operate on a entire directory (and all its subdirectories) of text files with this command:
+
+~~~bash
+$ find . -type f -exec dos2unix {} +
+~~~
+
+Of course, that command assumes that every file it finds is a text file and should be converted. So if you have data files or binary files that shouldn't be touched, you'll have to use a more selected command or mechanism.
+
+### Dependencies
+
+The scripts use:
+
+* perl
+
+<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
 </p>
 
 ## githelpers
@@ -74,6 +112,17 @@ All the repositories must be bare, mirror repositories.
 
 The script should be copied to the parent directory (the one containing all the cloned repositories) and is executed from the command line with that parent directory as the working directory. It will enter each subdirectory (i.e., each repository) and do a `git remote update --prune`. This will keep each repository update to date with the remote repository.
 
+<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
+</p>
+
+### Dependencies
+
+The scripts use:
+
+* Git
+* find
+* grep
+
 ## produce-wp
 
 This script, `produce-wp.sh`, takes [Markdown][] or [MultiMarkdown][] files and produces HTML suitable for pasting into WordPress posts and pages. It requires a little assist from a Perl script, `munge-wp.pl`, to cleanup some of the formatting and internal references.
@@ -110,7 +159,7 @@ The scripts use:
 * grep
 * pbcopy
 
-<p class="toclink">^<a href="#tableofcontents" title="Back to Table of Contents">TOC</a>
+<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
 </p>
 
 ## Document History
@@ -123,5 +172,5 @@ The scripts use:
 
 * 2014.03.22 -- Added githelpers script collection. Initially includes `fetchall.sh` and `updateall.sh`
 	
-<p class="toclink">^<a href="#tableofcontents" title="Back to Table of Contents">TOC</a>
+<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
 </p>
