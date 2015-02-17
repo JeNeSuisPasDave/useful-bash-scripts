@@ -64,20 +64,53 @@ testHost_() {
   rc_=$?
   if [[ 0 -eq $rc_ ]]; then
     echo "$1: ok"
+    return 0
   else
     echo "$1: FAILED!!"
     echo "  expected: $2"
     echo "    actual: $fp_actual_"
+    return 10
   fi
 }
 
+# updateFingerprints_() ---------------------------------------------------------+
+#
+# This method gets the current X.509 certificate fingerprint from the https site
+# and writes it and the host DNS to the keyfile
+#
+updateFingerprints_() {
+  tempfile="temp.txt"
+  > $tempfile
+
+  while read i; do
+    host_="${i%% *}"
+    fp_old_="${i##* }"
+    fp_actual_=$(checkFingerprint_ $host_ $fp_old_)
+    rc_=$?
+    if [[ 0 -eq $rc_ ]]; then
+      echo "$host_ - no change"
+    else
+      echo "$host_"
+      echo "old: $fp_old_"
+      echo "new: $fp_actual_"
+    fi
+    echo "$host_ $fp_actual_" >> $tempfile
+  done <$keyfile
+
+  mv $keyfile ${keyfile}.bak
+  mv $tempfile $keyfile
+}
 
 # testHosts_() ---------------------------------------------------------+
 #
 # This method checks the X.509 certificate fingerprint from the https sites
 # against the ones on file.
+# If any don't match, gives the option to update
+# the key file.
 #
 testHosts_() {
+  failed=0
+
   while read i; do
     host_="${i%% *}"
     fp_expected_="${i##* }"
@@ -88,6 +121,14 @@ testHosts_() {
     fi
   done <$keyfile
 
+  if [[ 0 -ne $failed ]]; then
+    echo "Not all keys were correct. This could indicate a MITM attack,"
+    echo " or that your keys are out of date. Update key file with new keys? [y/N]: "
+    read ans
+    if [[ "$ans" == "y" ]]; then
+      updateFingerprints_
+    fi
+  fi
 }
 
 testHosts_
