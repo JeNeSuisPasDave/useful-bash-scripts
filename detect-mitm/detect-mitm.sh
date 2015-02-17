@@ -31,11 +31,9 @@
 #    stdout: the detected fingerprint
 #
 checkFingerprint_() {
-  if [ -z "$1" ]
-  then
+  if [ -z "$1" ]; then
     return 1
-  elif [ -z "$2" ]
-  then
+  elif [ -z "$2" ]; then
     return 2
   fi
 
@@ -43,11 +41,10 @@ checkFingerprint_() {
     | openssl x509 -noout -fingerprint | cut -f2 -d'=')
 
   echo $fingerprint_
-  if [ "$2" = "$fingerprint_" ]
-  then
-      return 0
-    else
-      return 10
+  if [ "$2" = "$fingerprint_" ]; then
+    return 0
+  else
+    return 10
   fi
 }
 
@@ -63,8 +60,7 @@ checkFingerprint_() {
 testHost_() {
   fp_actual_=$(checkFingerprint_ $1 $2)
   rc_=$?
-  if [[ 0 -eq $rc_ ]]
-  then
+  if [[ 0 -eq $rc_ ]]; then
     echo "$1: ok"
   else
     echo "$1: FAILED!!"
