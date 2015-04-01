@@ -17,7 +17,7 @@
 # http://askubuntu.com/questions/156620/how-to-verify-the-ssl-fingerprint-by-command-line-wget-curl
 #
 
-keyfile="keyfile.txt"
+keyfile_="keyfile.txt"
 
 # checkFingerprint_() ---------------------------------------------------------+
 #
@@ -79,8 +79,8 @@ testHost_() {
 # and writes it and the host DNS to the keyfile
 #
 updateFingerprints_() {
-  tempfile="temp.txt"
-  > $tempfile
+  tempfile_="temp.txt"
+  > $tempfile_
 
   while read i; do
     host_="${i%% *}"
@@ -94,11 +94,11 @@ updateFingerprints_() {
       echo "old: $fp_old_"
       echo "new: $fp_actual_"
     fi
-    echo "$host_ $fp_actual_" >> $tempfile
-  done <$keyfile
+    echo "$host_ $fp_actual_" >> $tempfile_
+  done <$keyfile_
 
-  mv $keyfile ${keyfile}.bak
-  mv $tempfile $keyfile
+  mv $keyfile_ ${keyfile_}.bak
+  mv $tempfile_ $keyfile_
 }
 
 # testHosts_() ---------------------------------------------------------+
@@ -109,23 +109,24 @@ updateFingerprints_() {
 # the key file.
 #
 testHosts_() {
-  failed=0
+  failed_=0
 
   while read i; do
     host_="${i%% *}"
     fp_expected_="${i##* }"
     testHost_ $host_ $fp_expected_
     rc_=$?
-    if [[ 0 -eq $rc_ ]]; then
-      failed=1
+    if [[ 0 -ne $rc_ ]]; then
+      echo "rc: $rc_ host: $host_"
+      failed_=1
     fi
-  done <$keyfile
+  done <$keyfile_
 
-  if [[ 0 -ne $failed ]]; then
+  if [[ 0 -ne $failed_ ]]; then
     echo "Not all keys were correct. This could indicate a MITM attack,"
     echo " or that your keys are out of date. Update key file with new keys? [y/N]: "
-    read ans
-    if [[ "$ans" == "y" ]]; then
+    read ans_
+    if [[ "$ans_" == "y" ]]; then
       updateFingerprints_
     fi
   fi
