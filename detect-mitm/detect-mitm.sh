@@ -17,6 +17,8 @@
 # http://askubuntu.com/questions/156620/how-to-verify-the-ssl-fingerprint-by-command-line-wget-curl
 #
 
+keyfile_="keyfile.txt"
+
 # checkFingerprint_() ---------------------------------------------------------+
 #
 # This method retrieves the X.509 certificate fingerprint from the https site
@@ -31,11 +33,9 @@
 #    stdout: the detected fingerprint
 #
 checkFingerprint_() {
-  if [ -z "$1" ]
-  then
+  if [ -z "$1" ]; then
     return 1
-  elif [ -z "$2" ]
-  then
+  elif [ -z "$2" ]; then
     return 2
   fi
 
@@ -43,11 +43,10 @@ checkFingerprint_() {
     | openssl x509 -noout -fingerprint | cut -f2 -d'=')
 
   echo $fingerprint_
-  if [ "$2" = "$fingerprint_" ]
-  then
-      return 0
-    else
-      return 10
+  if [ "$2" = "$fingerprint_" ]; then
+    return 0
+  else
+    return 10
   fi
 }
 
@@ -63,56 +62,76 @@ checkFingerprint_() {
 testHost_() {
   fp_actual_=$(checkFingerprint_ $1 $2)
   rc_=$?
-  if [[ 0 -eq $rc_ ]]
-  then
+  if [[ 0 -eq $rc_ ]]; then
     echo "$1: ok"
+    return 0
   else
     echo "$1: FAILED!!"
     echo "  expected: $2"
     echo "    actual: $fp_actual_"
+    return 10
   fi
 }
 
-host_="www.grc.com"
-fp_expected_="A8:8E:F2:E4:9A:14:49:C8:A9:42:61:AC:B2:7F:95:20:78:A3:FF:62"
-testHost_ $host_ $fp_expected_
+# updateFingerprints_() ---------------------------------------------------------+
+#
+# This method gets the current X.509 certificate fingerprint from the https site
+# and writes it and the host DNS to the keyfile
+#
+updateFingerprints_() {
+  tempfile_="temp.txt"
+  > $tempfile_
 
-host_="www.facebook.com"
-fp_expected_="13:D0:37:6C:2A:B2:14:36:40:A6:2D:08:BB:71:F5:E9:EF:57:13:61"
-testHost_ $host_ $fp_expected_
+  while read i; do
+    host_="${i%% *}"
+    fp_old_="${i##* }"
+    fp_actual_=$(checkFingerprint_ $host_ $fp_old_)
+    rc_=$?
+    if [[ 0 -eq $rc_ ]]; then
+      echo "$host_ - no change"
+    else
+      echo "$host_"
+      echo "old: $fp_old_"
+      echo "new: $fp_actual_"
+    fi
+    echo "$host_ $fp_actual_" >> $tempfile_
+  done <$keyfile_
 
-host_="www.paypal.com"
-fp_expected_="DA:F3:F6:D5:3D:57:CF:CC:1C:12:37:83:67:E3:A5:39:9D:44:AE:CB"
-testHost_ $host_ $fp_expected_
+  mv $keyfile_ ${keyfile_}.bak
+  mv $tempfile_ $keyfile_
+}
 
-host_="www.wikipedia.org"
-fp_expected_="DA:AA:A4:9B:AD:0C:1F:A3:29:71:D8:CC:62:BA:72:D1:A4:DB:94:9F"
-testHost_ $host_ $fp_expected_
+# testHosts_() ---------------------------------------------------------+
+#
+# This method checks the X.509 certificate fingerprint from the https sites
+# against the ones on file.
+# If any don't match, gives the option to update
+# the key file.
+#
+testHosts_() {
+  failed_=0
 
-host_="twitter.com"
-fp_expected_="25:6E:40:25:23:C3:41:8E:1E:9A:01:85:44:84:58:AF:96:C4:A1:BE"
-testHost_ $host_ $fp_expected_
+  while read i; do
+    host_="${i%% *}"
+    fp_expected_="${i##* }"
+    testHost_ $host_ $fp_expected_
+    rc_=$?
+    if [[ 0 -ne $rc_ ]]; then
+      echo "rc: $rc_ host: $host_"
+      failed_=1
+    fi
+  done <$keyfile_
 
-host_="www.blogger.com"
-fp_expected_="0D:A4:05:E9:C4:12:5A:88:01:99:5E:8B:68:55:34:8A:E9:A6:A8:01"
-testHost_ $host_ $fp_expected_
+  if [[ 0 -ne $failed_ ]]; then
+    echo "Not all keys were correct. This could indicate a MITM attack,"
+    echo " or that your keys are out of date. Update key file with new keys? [y/N]: "
+    read ans_
+    if [[ "$ans_" == "y" ]]; then
+      updateFingerprints_
+    fi
+  fi
+}
 
-host_="www.linkedin.com"
-fp_expected_="E6:74:E6:A7:5C:6A:82:A9:2C:CE:25:DF:2A:DD:1C:85:A6:AD:F0:5C"
-testHost_ $host_ $fp_expected_
+testHosts_
 
-host_="www.yahoo.com"
-fp_expected_="E4:7E:24:8E:86:D2:BE:55:C0:4D:41:A1:C2:0E:06:96:56:B9:8E:EC"
-testHost_ $host_ $fp_expected_
 
-host_="wordpress.com"
-fp_expected_="E7:79:0C:AA:9D:68:F4:C1:0C:FF:36:C4:F6:2B:1A:06:C2:75:D7:74"
-testHost_ $host_ $fp_expected_
-
-host_="www.wordpress.com"
-fp_expected_="4D:AF:92:8D:30:39:74:A0:C6:D3:5A:B6:CB:A2:54:66:59:FE:D4:F4"
-testHost_ $host_ $fp_expected_
-
-host_="github.com"
-fp_expected_="D7:12:E9:69:65:DC:F2:36:C8:74:C7:03:7D:C0:B2:24:A9:3B:D2:33"
-testHost_ $host_ $fp_expected_
