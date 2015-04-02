@@ -117,7 +117,6 @@ testHosts_() {
     testHost_ $host_ $fp_expected_
     rc_=$?
     if [[ 0 -ne $rc_ ]]; then
-      echo "rc: $rc_ host: $host_"
       failed_=1
     fi
   done <$keyfile_
