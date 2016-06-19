@@ -2,22 +2,20 @@
 
 ## Table of Contents
 
-* <a href="#introduction">Introduction</a>
-* <a href="#backup-pinboard">backup-pinboard</a>
-* <a href="#detect-mitm">detect-mitm</a>
-* <a href="#dos2unix">dos2unix</a>
-* <a href="#githelpers">githelpers</a>
-* <a href="#produce-wp">produce-wp</a>
-* <a href="#document-history">Document History</a>
+* [Introduction](#introduction)
+* [backup-pinboard](#backup-pinboard)
+* [detect-mitm](#detect-mitm)
+* [dos2unix](#dos2unix)
+* [githelpers](#githelpers)
+* [produce-wp](#produce-wp)
+* [URL Helpers](#url-helpers)
+* [Document History](#document-history)
 
 ## Introduction
 
 This Git repository contains bash scripts that I found useful on my OS X system.
 
 Each sub-directory contains one or more scripts and supporting files focus on a certain task or set of related tasks.
-
-<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
-</p>
 
 ## backup-pinboard
 
@@ -31,9 +29,6 @@ The script uses:
 
 * curl
 
-<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
-</p>
-
 ## detect-mitm
 
 A script to detect whether there is an https proxy between your system and a variety of well-known web sites. Useful if you are at work, a hotel, a public wifi hotspot, or any other location where your connection to the internet might be intercepted and monitored.
@@ -46,9 +41,6 @@ The script uses:
 
 * openssl
 * cut
-
-<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
-</p>
 
 ## dos2unix
 
@@ -72,9 +64,6 @@ Of course, that command assumes that every file it finds is a text file and shou
 The scripts use:
 
 * perl
-
-<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
-</p>
 
 ## githelpers
 
@@ -120,9 +109,6 @@ The scripts use:
 * find
 * grep
 
-<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
-</p>
-
 ## produce-wp
 
 This script, `produce-wp.sh`, takes [Markdown][] or [MultiMarkdown][] files and produces HTML suitable for pasting into WordPress posts and pages. It requires a little assist from a Perl script, `munge-wp.pl`, to cleanup some of the formatting and internal references.
@@ -159,8 +145,25 @@ The scripts use:
 * grep
 * pbcopy
 
-<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
-</p>
+## URL helpers
+
+### longurl.sh
+
+This script is URL lengthener. It takes a URL and follows all the redirects to discover the ultimate URL. For example, `http://bit.ly/pdp8kit` resolves to `http://obsolescence.wix.com/obsolescence#!pidp-8-get-one/ctny`.
+
+The script does this by using `curl` to make HEAD requests to the server and asking `curl` to automatically follow redirects.
+
+As long as no error status codes were encountered, the last `Location:` header encountered will be the resolved URL that is returned. If no redirection occurs, then the URL supplied on the command line will be the one that gets returned.
+
+You can see the headers received by `curl` if you use the `--headers` option in the script command line.
+
+### longurl.src
+
+This is essentially the same as `longurl.sh` except encapsulated as a bash function `longurl()` that could be added to your bash profile.
+
+### Dependencies
+
+Requires `curl`.
 
 ## Document History
 
@@ -174,5 +177,3 @@ The scripts use:
 
 * 2014.03.21 -- Added dos2unix collection. Include `dos2unix` and `unix2dos` scripts.
 	
-<p class="toclink">^<a href="#table-of-contents" title="Back to Table of Contents">TOC</a>
-</p>

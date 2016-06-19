@@ -1,0 +1,141 @@
+# Use curl to find the actual url after following any and all redirects
+#
+# Essentially, this is an a URL lengthener
+#
+function longurl() {
+  # Requires curl
+  #
+  if ! type curl >/dev/null 2>&1; then
+    echo "ERROR: Requires curl, but can't find curl." 1>&2
+    return 1;
+  fi
+
+  # parse arguments
+  #
+  local argcount_=$#
+  local args_=( "$@" )
+  local showheaders_=0
+  local url_=""
+  local badargs_=0
+  local showedhelp_=0
+  local skip_=0
+  local i=0
+  while (( argcount_ > $i )); do
+    if (( 0 != $showedhelp_ )); then
+      break;
+    fi
+    if (( 0 != $skip_ )); then
+      skip_=0
+      (( ++i ))
+      continue
+    fi
+    case "${args_[$i]}" in
+      -\?|-h|--help )
+        echo "longurl [-I|--headers] URL" 1>&2
+        echo "longurl -?|-h|--help" 1>&2
+        echo "" 1>&2
+        showedhelp_=1
+        ;;
+      -I|--headers )
+        showheaders_=1
+        ;;
+      -* )
+        echo "ERROR: unrecognized argument '${args_[$i]}'." 1>&2
+        echo "" 1>&2
+        echo "usage: longurl [-I|--headers] URL" 1>&2
+        echo "       longurl -?|-h|--help" 1>&2
+        echo "" 1>&2
+        badargs_=1
+        ;;
+      * )
+        if [ ! -z "${url_}" ]; then
+          echo "ERROR: unexpected argument '${args_[$i]}'." 1>&2
+          echo "" 1>&2
+          echo "usage: longurl [-I|--headers] URL" 1>&2
+          echo "       longurl -?|-h|--help" 1>&2
+          echo "" 1>&2
+          badargs_=1
+        else
+          url_="${args_[$i]}"
+        fi
+        ;;
+    esac
+    (( ++i ))
+  done
+
+  if (( 0 != $badargs_ )); then
+    return 1
+  fi
+  if (( 0 != $showedhelp_ )); then
+    return 1
+  fi
+  if [ -z "${url_}" ]; then
+    echo "ERROR: Missing URL" 1>&2
+    echo "" 1>&2
+    echo "usage: longurl [-I|--headers] URL" 1>&2
+    echo "       longurl -?|-h|--help" 1>&2
+    echo "" 1>&2
+    return 1
+  fi
+
+  # Capture the headers
+  #
+  local allheaders_=( )
+  local lines_=""
+  local headers_=( )
+  IFS=$'\n' GLOBIGNORE='*' command eval \
+    'allheaders_=( $( curl -I -L -s $url_ ) )'
+  IFS=$'\n' lines_="${allheaders_[*]}"
+  IFS=$'\n' GLOBIGNORE='*' command eval \
+    'headers_=( $( echo "$lines_" | egrep "^HTTP|^Location:" ) )'
+
+  # Display the headers
+  #
+  if (( 0 != $showheaders_ )); then
+    echo "$lines_" 1>&2
+  fi
+
+  # Process the headers
+  #
+  local quality_=0
+  longurl="$url_"
+  for (( i=0; i < ${#headers_[@]}; ++i ))
+  do
+    # If we hit a bad header, then skip remaining lines
+    #
+    if (( 0 != $quality_ )); then
+      continue
+    fi
+
+    # Check header
+    #
+    re_='^HTTP.*\ +([0-9]+)\ *'
+    if [[ ${headers_[i]} =~ $re_ ]]; then
+      code_=${BASH_REMATCH[1]}
+      if (( 404 == $code_ )); then
+        # 'Not Found' is OK; site might not support HEAD requests
+        continue
+      elif (( 200 > $code_ )) || (( 400 <= $code_ )); then
+        quality_=1
+        longurl="$url_"
+      fi
+      continue
+    fi
+
+    # Update location
+    #
+    re_='^Location:\ ([^ ][^ ]*)'
+    if [[ ${headers_[i]} =~ $re_ ]]; then
+      longurl="${BASH_REMATCH[1]}"
+    fi
+  done
+
+  # strip CR and LF
+  #
+  longurl="${longurl//$'\r'/}"
+  longurl="${longurl//$'\n'/}"
+
+  # Get out
+  #
+  return $quality_
+}
