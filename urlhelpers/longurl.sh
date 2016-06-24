@@ -13,6 +13,210 @@ if ! type curl >/dev/null 2>&1; then
   exit 1;
 fi
 
+# -----------------------------------------------------------------------------+
+# function longurl_method_head()
+#
+# Retrieves the ultimate URL, after following the chain of redirection,
+# using the HTTP HEAD method.
+#
+function longurl_method_head() {
+
+  longurl_method_head=""
+
+  # First argument should be the URL
+  #
+  if [ -z "$1" ]; then
+    return 0
+  fi
+  local url_="$1"
+  local allheaders_=()
+  local lines_=""
+  local headers_=()
+  local quality_=0
+  local long_url_=""
+  local showheaders_=0
+  if [ ! -z "$2" ]; then
+    showheaders_=$2
+  fi
+
+  # Clean out cookies
+  #
+  if [[ -f "/var/tmp/longurl.cookies" ]]; then
+    rm /var/tmp/longurl.cookies
+  fi
+
+  # Captures the headers
+  #
+  IFS=$'\n' GLOBIGNORE='*' command eval \
+    'allheaders_=( $( curl -I -b /var/tmp/longurl.cookies -c /var/tmp/longurl.cookies -L -s "$url_" ) )'
+  IFS=$'\n' lines_="${allheaders_[*]}"
+  IFS=$'\n' GLOBIGNORE='*' command eval \
+    'headers_=( $( echo "$lines_" | egrep "^HTTP|^[Ll]ocation:" ) )'
+
+  # Display the headers
+  #
+  if (( 0 != $showheaders_ )); then
+    echo "$lines_"
+  fi
+
+  # Process the headers
+  #
+  quality_=0
+  long_url_="$url_"
+  for (( i=0; i < ${#headers_[@]}; ++i ))
+  do
+    # If we hit a bad header, then skip remaining lines
+    #
+    if (( 0 != $quality_ )); then
+      continue
+    fi
+
+    # Check header
+    #
+    re_='^HTTP.*\ +([0-9]+)\ *'
+    if [[ ${headers_[i]} =~ $re_ ]]; then
+      code_=${BASH_REMATCH[1]}
+      if (( 200 > $code_ )) || (( 400 <= $code_ )); then
+        # fatal error
+        quality_=1
+        break
+      elif (( 301 == $code_ )); then
+        continue; # look for location header
+      elif (( 302 == $code_ )); then
+        continue; # look for location header
+      elif (( 303 == $code_ )); then
+        continue; # look for location header
+      else
+        break; # done looking, probably at end of redirection chain
+      fi
+    fi
+
+    # Update location
+    #
+    re_='^[Ll]ocation:\ ([^ ].*)[ ]*$'
+    if [[ ${headers_[i]} =~ $re_ ]]; then
+      long_url_="${BASH_REMATCH[1]}"
+    fi
+  done
+
+  # strip CR, LF
+  #
+  long_url_="${long_url_//$'\r'/}"
+  long_url_="${long_url_//$'\n'/}"
+
+  # strip bad encoding and embedded spaces
+  #
+  # long_url_="${long_url_//$'%[8A-F][0-9A-F]'/}"
+  # long_url_="${long_url_//$' '/}"
+
+  # Get out
+  #
+  longurl_method_head="${long_url_}"
+  return $quality_
+}
+
+# -----------------------------------------------------------------------------+
+# function longurl_method_get()
+#
+# Retrieves the ultimate URL, after following the chain of redirection,
+# using the HTTP GET method.
+#
+function longurl_method_get() {
+
+  longurl_method_get=""
+
+  # First argument should be the URL
+  #
+  if [ -z "$1" ]; then
+    return 0
+  fi
+  local url_="$1"
+  local allheaders_=()
+  local lines_=""
+  local headers_=()
+  local quality_=0
+  local long_url_=""
+  local showheaders_=0
+  if [ ! -z "$2" ]; then
+    showheaders_=$2
+  fi
+
+  # Clean out cookies
+  #
+  if [[ -f "/var/tmp/longurl.cookies" ]]; then
+    rm /var/tmp/longurl.cookies
+  fi
+
+  # Captures the headers
+  #
+  IFS=$'\n' GLOBIGNORE='*' command eval \
+    'allheaders_=( $( curl -i -b /var/tmp/longurl.cookies -c /var/tmp/longurl.cookies -L -s "$url_" ) )'
+  IFS=$'\n' lines_="${allheaders_[*]}"
+  IFS=$'\n' GLOBIGNORE='*' command eval \
+    'headers_=( $( echo "$lines_" | egrep "^HTTP|^[Ll]ocation:" ) )'
+
+  # Display the headers
+  #
+  if (( 0 != $showheaders_ )); then
+    echo "$lines_"
+  fi
+
+  # Process the headers
+  #
+  quality_=0
+  long_url_="$url_"
+  for (( i=0; i < ${#headers_[@]}; ++i ))
+  do
+    # If we hit a bad header, then skip remaining lines
+    #
+    if (( 0 != $quality_ )); then
+      continue
+    fi
+
+    # Check header
+    #
+    re_='^HTTP.*\ +([0-9]+)\ *'
+    if [[ ${headers_[i]} =~ $re_ ]]; then
+      code_=${BASH_REMATCH[1]}
+      if (( 200 > $code_ )) || (( 400 <= $code_ )); then
+        # fatal error
+        quality_=1
+        break
+      elif (( 301 == $code_ )); then
+        continue; # look for location header
+      elif (( 302 == $code_ )); then
+        continue; # look for location header
+      elif (( 303 == $code_ )); then
+        continue; # look for location header
+      else
+        break; # done looking, probably at end of redirection chain
+      fi
+    fi
+
+    # Update location
+    #
+    re_='^[Ll]ocation:\ ([^ ].*)[ ]*$'
+    if [[ ${headers_[i]} =~ $re_ ]]; then
+      long_url_="${BASH_REMATCH[1]}"
+    fi
+  done
+
+  # strip CR, LF
+  #
+  long_url_="${long_url_//$'\r'/}"
+  long_url_="${long_url_//$'\n'/}"
+
+  # strip bad encoding and embedded spaces
+  #
+  # long_url_="${long_url_//$'%[8A-F][0-9A-F]'/}"
+  # long_url_="${long_url_//$' '/}"
+
+  # Get out
+  #
+  longurl_method_get="${long_url_}"
+  return $quality_
+}
+
 # parse arguments
 #
 argcount_=$#
@@ -77,68 +281,21 @@ if [ -z "${url_}" ]; then
   exit 1
 fi
 
-# Captures the headers
-#
-# IFS=$'\r\n' GLOBIGNORE='*' command eval \
-#   'headers_=( $( curl -I -L -s $url_ | egrep "^HTTP|^Location:" ) )'
-IFS=$'\n' GLOBIGNORE='*' command eval \
-  'allheaders_=( $( curl -I -L -s $url_ ) )'
-IFS=$'\n' lines_="${allheaders_[*]}"
-IFS=$'\n' GLOBIGNORE='*' command eval \
-  'headers_=( $( echo "$lines_" | egrep "^HTTP|^Location:" ) )'
-
-# Display the headers
-#
-if (( 0 != $showheaders_ )); then
-  echo "$lines_"
+longurl_method_head "${url_}" "${showheaders_}"
+quality_=$?
+long_url_="${longurl_method_head}"
+if (( 0 != $quality_ )); then
+  longurl_method_get "${url_}" "${showheaders_}"
+  quality_=$?
+  long_url_="${longurl_method_get}"
 fi
-
-# Process the headers
-#
-quality_=0
-long_url_="$url_"
-for (( i=0; i < ${#headers_[@]}; ++i ))
-do
-  # If we hit a bad header, then skip remaining lines
-  #
-  if (( 0 != $quality_ )); then
-    continue
-  fi
-
-  # Check header
-  #
-  re_='^HTTP.*\ +([0-9]+)\ *'
-  if [[ ${headers_[i]} =~ $re_ ]]; then
-    code_=${BASH_REMATCH[1]}
-    if (( 404 == $code_ )); then
-      # 'Not Found' is OK; site might not support HEAD requests
-      continue
-    elif (( 200 > $code_ )) || (( 400 <= $code_ )); then
-      quality_=1
-      long_url_="$url_"
-    fi
-    continue
-  fi
-
-  # Update location
-  #
-  re_='^Location:\ ([^ ][^ ]*)'
-  if [[ ${headers_[i]} =~ $re_ ]]; then
-    long_url_="${BASH_REMATCH[1]}"
-  fi
-done
-
-# strip CR and LF
-#
-long_url_="${long_url_//$'\r'/}"
-long_url_="${long_url_//$'\n'/}"
 
 # if stdout is going to the terminal, include a line feed; otherwise not
 #
 if [ -t 1 ]; then
-  echo "$long_url_"
+  echo "${long_url_}"
 else
-  echo -n "$long_url_"
+  echo -n "${long_url_}"
 fi
 
 # Get out
