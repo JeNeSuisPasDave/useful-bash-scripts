@@ -39,7 +39,8 @@ checkFingerprint_() {
     return 2
   fi
 
-  fingerprint_=$(echo -n | openssl s_client -connect $1:443 2>/dev/null \
+  fingerprint_=$(echo -n | openssl s_client -connect $1:443 \
+    -servername $1 2>/dev/null \
     | openssl x509 -noout -fingerprint | cut -f2 -d'=')
 
   echo $fingerprint_
