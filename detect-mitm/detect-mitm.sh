@@ -17,7 +17,19 @@
 # http://askubuntu.com/questions/156620/how-to-verify-the-ssl-fingerprint-by-command-line-wget-curl
 #
 
+# README README README README README README
+#
+# README: if you install gnetcat then this wcript will quickly detect whether
+#         the remote host is reachable and listening on 443. Without gnetcat then
+#         an unresponsive host may slow or hang the script.
+#
+
 keyfile_="keyfile.txt"
+
+# gnetcat is a version of netcat (a.k.a. nc) with a working -w argument.
+# the netcat that ships with macOS 10.12.6 seems toignore the -w argument.
+#
+hasGNetCat_=0
 
 # checkFingerprint_() ---------------------------------------------------------+
 #
@@ -51,7 +63,37 @@ checkFingerprint_() {
   fi
 }
 
-# checkFingerprint_() ---------------------------------------------------------+
+# checkConnection_() ----------------------------------------------------------+
+#
+# Args:
+#   $1: the hostname to check
+#
+checkConnection_() {
+  if [ -z "$1" ]; then
+    return 1
+  fi
+
+  # can only do this if gnetcat is installed
+  # because we rely on the -w argument which
+  # doesn't work with the builtin netcat (nc)
+  # on macOS 10.12
+  #
+  if [[ 0 -eq hasGNetCat_ ]]; then
+    return 0
+  fi
+
+  # does the host exist and is it listening on 443?
+  #
+  gnetcat -w 2 -z $1 443 2>/dev/null
+  rc_=$?
+  if [[ 0 -eq $rc_ ]]; then
+    return 0
+  else
+    return 5
+  fi
+}
+
+# testHost_() -----------------------------------------------------------------+
 #
 # This method retrieves the X.509 certificate fingerprint from the https site
 # and checks it agains the expected fingerprint
@@ -61,6 +103,12 @@ checkFingerprint_() {
 #   $2: the expected fingerprint
 #
 testHost_() {
+  connOK_=$(checkConnection_ $1)
+  rc_=$?
+  if [[ 0 -ne $rc_ ]]; then
+    echo "$1: Unreachable"
+    return 0
+  fi
   fp_actual_=$(checkFingerprint_ $1 $2)
   rc_=$?
   if [[ 0 -eq $rc_ ]]; then
@@ -74,7 +122,7 @@ testHost_() {
   fi
 }
 
-# updateFingerprints_() ---------------------------------------------------------+
+# updateFingerprints_() -------------------------------------------------------+
 #
 # This method gets the current X.509 certificate fingerprint from the https site
 # and writes it and the host DNS to the keyfile
@@ -102,7 +150,7 @@ updateFingerprints_() {
   mv $tempfile_ $keyfile_
 }
 
-# testHosts_() ---------------------------------------------------------+
+# testHosts_() ----------------------------------------------------------------+
 #
 # This method checks the X.509 certificate fingerprint from the https sites
 # against the ones on file.
@@ -112,6 +160,16 @@ updateFingerprints_() {
 testHosts_() {
   failed_=0
 
+  # Does gnetcat exist?
+  #
+  which gnetcat >/dev/null
+  rc_=$?
+  if [[ 0 -eq $rc_ ]]; then
+    hasGNetCat_=1
+  fi
+
+  # loop through keyfile, checking each host
+  #
   while read i; do
     host_="${i%% *}"
     fp_expected_="${i##* }"
